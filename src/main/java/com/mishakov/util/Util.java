@@ -6,22 +6,30 @@ import java.sql.SQLException;
 
 public class Util {
 
-    public static Connection getMySQLConnection() throws SQLException, ClassNotFoundException {
-        // change these variables for your DB parameters, if needed
-        String hostName = "localhost";
-        String dbName = "mydbtest";
-        String userName = "root";
-        String password = "rood";
-        return getMySQLConnection(hostName, dbName, userName, password);
-    }
+    private static final String DBNAME = "mydbtest";
+    private static final String URL = "jdbc:mysql://localhost:3306/" + DBNAME;
+    private static final String USER = "root";
+    private static final String PASSWORD = "rood";
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; // for old java (< 8 version)
 
-    public static Connection getMySQLConnection(String hostName, String dbName,
-                                                String userName, String password) throws SQLException,
-            ClassNotFoundException{
-        //Class.forName("com.mysql.cj.jdbc.Driver");
-        String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
-        Connection conn = DriverManager.getConnection(connectionURL, userName, password);
+    private static Connection myConnection = Util.getMySQLConnection();
+
+    private static Connection getMySQLConnection() {
+        Connection conn= null;
+        try {
+            Class.forName(DRIVER); // for old java (< 8 version)
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException sqlException) {
+            System.out.println("Problem with connection");
+            sqlException.printStackTrace();
+        } catch (ClassNotFoundException classNotFoundException) {
+            System.out.println("Driver not found");
+            classNotFoundException.printStackTrace();
+        }
         return conn;
     }
 
+    public static Connection getMyConnection() {
+        return myConnection;
+    }
 }
