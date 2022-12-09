@@ -1,9 +1,12 @@
 package com.mishakov;
 
-import com.mishakov.util.Util;
+import com.mishakov.dao.UserDao;
+import com.mishakov.dao.UserDaoJDBCImpl;
 
 public class Main {
     public static void main(String[] args) {
-       Util util = new Util();
+        UserDao userDao = new UserDaoJDBCImpl();
+        userDao.createUsersTable();
+        userDao.createUsersTable();
     }
 }
