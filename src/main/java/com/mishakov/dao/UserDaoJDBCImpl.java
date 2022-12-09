@@ -41,11 +41,29 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-
+        try {
+            myPS = connection.prepareStatement(DELETE_TABLE);
+            myPS.executeUpdate();
+            myPS.close();
+        } catch(SQLException ex) {
+            System.out.println("Problems with deleting table");
+            ex.printStackTrace();
+        }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-
+        try {
+            myPS = connection.prepareStatement(SAVE_NEW_USER);
+            myPS.setString(1, name);
+            myPS.setString(2, lastName);
+            myPS.setByte(3, age);
+            myPS.executeUpdate();
+            System.out.println("User с именем - " + name + " успешно добавлен в базу данных");
+            myPS.close();
+        } catch(SQLException ex) {
+            System.out.println("Problems with saving user");
+            ex.printStackTrace();
+        }
     }
 
     public void removeUserById(long id) {
