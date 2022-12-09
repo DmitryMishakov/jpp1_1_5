@@ -19,6 +19,7 @@ public class Util {
         try {
             Class.forName(DRIVER); // for old java (< 8 version)
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Connection OK"); // не забудь исключить из коммитов и удалить потом вообще
         } catch (SQLException sqlException) {
             System.out.println("Problem with connection");
             sqlException.printStackTrace();
