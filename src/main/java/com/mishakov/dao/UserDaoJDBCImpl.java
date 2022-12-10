@@ -5,7 +5,9 @@ import com.mishakov.util.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
@@ -73,13 +75,29 @@ public class UserDaoJDBCImpl implements UserDao {
             myPS.executeUpdate();
             myPS.close();
         } catch(SQLException ex) {
-            System.out.println("Problems with creating table");
+            System.out.println("Problems with removing user");
             ex.printStackTrace();
         }
     }
 
     public List<User> getAllUsers() {
-        return null;
+        List<User> result =new ArrayList<>();
+        try {
+            myPS = connection.prepareStatement(GET_ALL_USERS);
+            ResultSet resultSet = myPS.executeQuery();
+            while(resultSet.next()) {
+                User user = new User(resultSet.getString("name"),
+                        resultSet.getString("lastName"),
+                        resultSet.getByte("age"));
+                user.setId(resultSet.getLong("id"));
+                result.add(user);
+            }
+            myPS.close();
+        } catch(SQLException ex) {
+            System.out.println("Problems with select all users");
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     public void cleanUsersTable() {
