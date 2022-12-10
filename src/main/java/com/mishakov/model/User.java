@@ -57,6 +57,10 @@ public class User {
         return age;
     }
 
+    public void setAge(Byte age) {
+        this.age = age;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
