@@ -25,17 +25,15 @@ public class UserDaoJDBCImpl implements UserDao {
     private final String CLEAR_TABLE = "DELETE FROM users";
     private final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
 
-    private Connection connection = Util.getMyConnection();
-    private PreparedStatement myPS = null;
+    private Util util = new Util();
 
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
-        try {
-            myPS = connection.prepareStatement(CREATE_TABLE);
+        try(Connection connection = util.getMySQLConnection();
+                PreparedStatement myPS = connection.prepareStatement(CREATE_TABLE)) {
             myPS.executeUpdate();
-            myPS.close();
         } catch(SQLException ex) {
             System.out.println("Problems with creating table");
             ex.printStackTrace();
@@ -43,10 +41,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try {
-            myPS = connection.prepareStatement(DELETE_TABLE);
+        try(Connection connection = util.getMySQLConnection();
+            PreparedStatement myPS = connection.prepareStatement(DELETE_TABLE)) {
             myPS.executeUpdate();
-            myPS.close();
         } catch(SQLException ex) {
             System.out.println("Problems with deleting table");
             ex.printStackTrace();
@@ -54,14 +51,13 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            myPS = connection.prepareStatement(SAVE_NEW_USER);
+        try(Connection connection = util.getMySQLConnection();
+            PreparedStatement myPS = connection.prepareStatement(SAVE_NEW_USER)) {
             myPS.setString(1, name);
             myPS.setString(2, lastName);
             myPS.setByte(3, age);
             myPS.executeUpdate();
             System.out.println("User с именем - " + name + " успешно добавлен в базу данных");
-            myPS.close();
         } catch(SQLException ex) {
             System.out.println("Problems with saving user");
             ex.printStackTrace();
@@ -69,11 +65,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try {
-            myPS = connection.prepareStatement(DELETE_USER_BY_ID);
+        try(Connection connection = util.getMySQLConnection();
+            PreparedStatement myPS = connection.prepareStatement(DELETE_USER_BY_ID)) {
             myPS.setLong(1, id);
             myPS.executeUpdate();
-            myPS.close();
         } catch(SQLException ex) {
             System.out.println("Problems with removing user");
             ex.printStackTrace();
@@ -82,8 +77,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> result =new ArrayList<>();
-        try {
-            myPS = connection.prepareStatement(GET_ALL_USERS);
+        try(Connection connection = util.getMySQLConnection();
+            PreparedStatement myPS = connection.prepareStatement(GET_ALL_USERS)) {
             ResultSet resultSet = myPS.executeQuery();
             while(resultSet.next()) {
                 User user = new User(resultSet.getString("name"),
@@ -92,7 +87,6 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setId(resultSet.getLong("id"));
                 result.add(user);
             }
-            myPS.close();
         } catch(SQLException ex) {
             System.out.println("Problems with select all users");
             ex.printStackTrace();
@@ -101,10 +95,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try {
-            myPS = connection.prepareStatement(CLEAR_TABLE);
+        try(Connection connection = util.getMySQLConnection();
+            PreparedStatement myPS = connection.prepareStatement(CLEAR_TABLE)) {
             myPS.executeUpdate();
-            myPS.close();
         } catch(SQLException ex) {
             System.out.println("Problems with clearing table");
             ex.printStackTrace();
