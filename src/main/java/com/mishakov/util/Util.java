@@ -12,9 +12,7 @@ public class Util {
     private static final String PASSWORD = "rood";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; // for old java (< 8 version)
 
-    private static Connection myConnection = new Util().getMySQLConnection();
-
-    private Connection getMySQLConnection() {
+    public Connection getMySQLConnection() {
         Connection conn= null;
         try {
             Class.forName(DRIVER); // for old java (< 8 version)
@@ -27,9 +25,5 @@ public class Util {
             classNotFoundException.printStackTrace();
         }
         return conn;
-    }
-
-    public static Connection getMyConnection() {
-        return myConnection;
     }
 }
