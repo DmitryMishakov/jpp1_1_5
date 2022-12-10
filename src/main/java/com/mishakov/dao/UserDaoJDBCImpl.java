@@ -101,6 +101,13 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-
+        try {
+            myPS = connection.prepareStatement(CLEAR_TABLE);
+            myPS.executeUpdate();
+            myPS.close();
+        } catch(SQLException ex) {
+            System.out.println("Problems with clearing table");
+            ex.printStackTrace();
+        }
     }
 }
