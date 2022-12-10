@@ -12,9 +12,9 @@ public class Util {
     private static final String PASSWORD = "rood";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; // for old java (< 8 version)
 
-    private static Connection myConnection = Util.getMySQLConnection();
+    private static Connection myConnection = new Util().getMySQLConnection();
 
-    private static Connection getMySQLConnection() {
+    private Connection getMySQLConnection() {
         Connection conn= null;
         try {
             Class.forName(DRIVER); // for old java (< 8 version)
