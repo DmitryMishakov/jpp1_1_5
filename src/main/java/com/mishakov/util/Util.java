@@ -13,7 +13,7 @@ public class Util {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver"; // for old java (< 8 version)
 
     public Connection getMySQLConnection() {
-        Connection conn= null;
+        Connection conn = null;
         try {
             Class.forName(DRIVER); // for old java (< 8 version)
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
