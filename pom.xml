@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mishakov</groupId>
-    <artifactId>jpp1_1_4</artifactId>
+    <artifactId>jpp1_1_5</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
