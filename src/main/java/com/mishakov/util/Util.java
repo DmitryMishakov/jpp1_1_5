@@ -51,7 +51,6 @@ public class Util {
                 settings.put(Environment.USER, USER);
                 settings.put(Environment.PASS, PASSWORD);
                 settings.put(Environment.DIALECT, DIALECT);
-                settings.put(Environment.SHOW_SQL, true); // не зыбыть потом удалить
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(settings).build();
