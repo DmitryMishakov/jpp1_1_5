@@ -10,6 +10,8 @@ import java.util.List;
 public class UserDaoHibernateImpl implements UserDao {
 
     private Transaction transaction;
+
+    private final String DELETE_TABLE = "DROP TABLE IF EXISTS users";
     private final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `mydbtest`.`users` " +
             "(`id` BIGINT NOT NULL AUTO_INCREMENT," +
             " `name` VARCHAR(45) NOT NULL," +
@@ -39,7 +41,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-
+        try(Session session = Util.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.createNativeQuery(DELETE_TABLE).executeUpdate();
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Problem with delete table");
+            ex.printStackTrace();
+        }
     }
 
     @Override
