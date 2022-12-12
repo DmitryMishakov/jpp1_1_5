@@ -64,8 +64,9 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             session.persist(new User(name, lastName, age));
             session.getTransaction().commit();
+            System.out.println("User с именем - " + name + " успешно добавлен в базу данных");
         } catch (Exception ex) {
-            System.out.println("Problem with delete table");
+            System.out.println("Problem with save user");
             ex.printStackTrace();
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
