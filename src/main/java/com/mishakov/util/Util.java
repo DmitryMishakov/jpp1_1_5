@@ -45,7 +45,6 @@ public class Util {
     private static SessionFactory buildMySessionFactory() {
         if(sessionFactory == null) {
             try {
-//                Configuration configuration = new Configuration();
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, DRIVER);
                 settings.put(Environment.URL, URL);
@@ -53,12 +52,6 @@ public class Util {
                 settings.put(Environment.PASS, PASSWORD);
                 settings.put(Environment.DIALECT, DIALECT);
                 settings.put(Environment.SHOW_SQL, true); // не зыбыть потом удалить
-//                configuration.setProperties(settings);
-
-//                configuration.addAnnotatedClass(User.class);
-
-//                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-//                        .applySettings(configuration.getProperties()).build();
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(settings).build();
@@ -67,8 +60,6 @@ public class Util {
                 metadataSources.addAnnotatedClass(User.class);
                 Metadata metadata = metadataSources.buildMetadata();
 
-
-//                return new Configuration().buildSessionFactory(serviceRegistry);
                 return metadata.getSessionFactoryBuilder().build();
             } catch (Throwable ex) {
                 System.err.println("Initial SessionFactory creation failed " + ex);
