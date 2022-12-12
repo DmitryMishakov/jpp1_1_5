@@ -3,13 +3,10 @@ package com.mishakov.dao;
 import com.mishakov.model.User;
 import com.mishakov.util.Util;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-
-    private Transaction transaction;
 
     private final String DELETE_TABLE = "DROP TABLE IF EXISTS users";
     private final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `mydbtest`.`users` " +
@@ -26,37 +23,56 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        try(Session session = Util.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+        Session session = Util.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
             session.createNativeQuery(CREATE_TABLE).executeUpdate();
-            transaction.commit();
+            session.getTransaction().commit();
         } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (session.getTransaction() != null) {
+                session.getTransaction().rollback();
             }
             System.out.println("Problem with create table");
             ex.printStackTrace();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public void dropUsersTable() {
-        try(Session session = Util.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+        Session session = Util.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
             session.createNativeQuery(DELETE_TABLE).executeUpdate();
-            transaction.commit();
+            session.getTransaction().commit();
         } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (session.getTransaction() != null) {
+                session.getTransaction().rollback();
             }
             System.out.println("Problem with delete table");
             ex.printStackTrace();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-
+        Session session = Util.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            session.persist(new User(name, lastName, age));
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            System.out.println("Problem with delete table");
+            ex.printStackTrace();
+            if (session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+        } finally {
+            session.close();
+        }
     }
 
     @Override
