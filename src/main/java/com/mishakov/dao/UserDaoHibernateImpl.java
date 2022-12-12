@@ -1,10 +1,22 @@
 package com.mishakov.dao;
 
 import com.mishakov.model.User;
+import com.mishakov.util.Util;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
+
+    private Transaction transaction;
+    private final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `mydbtest`.`users` " +
+            "(`id` BIGINT NOT NULL AUTO_INCREMENT," +
+            " `name` VARCHAR(45) NOT NULL," +
+            " `lastName` VARCHAR(45) NOT NULL," +
+            " `age` TINYINT NOT NULL," +
+            " PRIMARY KEY (`id`))";
+
     public UserDaoHibernateImpl() {
 
     }
@@ -12,7 +24,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-
+        try(Session session = Util.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.createNativeQuery(CREATE_TABLE).executeUpdate();
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Problem with create table");
+            ex.printStackTrace();
+        }
     }
 
     @Override
