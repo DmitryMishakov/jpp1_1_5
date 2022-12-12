@@ -1,14 +1,14 @@
 package com.mishakov.service;
 
 import com.mishakov.dao.UserDao;
-import com.mishakov.dao.UserDaoJDBCImpl;
+import com.mishakov.dao.UserDaoHibernateImpl;
 import com.mishakov.model.User;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    UserDao userDao = new UserDaoJDBCImpl();
+    UserDao userDao = new UserDaoHibernateImpl();
 
     public void createUsersTable() {
         userDao.createUsersTable();
