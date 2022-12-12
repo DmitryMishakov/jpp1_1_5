@@ -2,8 +2,9 @@ package com.mishakov.util;
 
 import com.mishakov.model.User;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
@@ -44,7 +45,7 @@ public class Util {
     private static SessionFactory buildMySessionFactory() {
         if(sessionFactory == null) {
             try {
-                Configuration configuration = new Configuration();
+//                Configuration configuration = new Configuration();
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, DRIVER);
                 settings.put(Environment.URL, URL);
@@ -52,16 +53,23 @@ public class Util {
                 settings.put(Environment.PASS, PASSWORD);
                 settings.put(Environment.DIALECT, DIALECT);
                 settings.put(Environment.SHOW_SQL, true); // не зыбыть потом удалить
-                settings.put(Environment.HBM2DDL_AUTO, "update");
+//                configuration.setProperties(settings);
 
-                configuration.setProperties(settings);
+//                configuration.addAnnotatedClass(User.class);
 
-                configuration.addAnnotatedClass(User.class);
+//                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+//                        .applySettings(configuration.getProperties()).build();
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties()).build();
+                        .applySettings(settings).build();
 
-                return new Configuration().buildSessionFactory(serviceRegistry);
+                MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+                metadataSources.addAnnotatedClass(User.class);
+                Metadata metadata = metadataSources.buildMetadata();
+
+
+//                return new Configuration().buildSessionFactory(serviceRegistry);
+                return metadata.getSessionFactoryBuilder().build();
             } catch (Throwable ex) {
                 System.err.println("Initial SessionFactory creation failed " + ex);
                 throw new ExceptionInInitializerError(ex);
