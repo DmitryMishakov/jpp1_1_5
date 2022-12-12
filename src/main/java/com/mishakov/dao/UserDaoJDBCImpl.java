@@ -25,7 +25,7 @@ public class UserDaoJDBCImpl implements UserDao {
     private final String CLEAR_TABLE = "DELETE FROM users";
     private final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
 
-    private Util util = new Util();
+    private final Util util = new Util();
 
     public UserDaoJDBCImpl() {
     }
