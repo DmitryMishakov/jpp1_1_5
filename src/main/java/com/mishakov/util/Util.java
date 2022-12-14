@@ -1,6 +1,7 @@
 package com.mishakov.util;
 
 import com.mishakov.model.User;
+import jakarta.persistence.EntityManager;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -71,6 +72,10 @@ public class Util {
 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public static EntityManager getEntityManager() {
+        return sessionFactory.createEntityManager();
     }
 
     public static void shutdown() {
