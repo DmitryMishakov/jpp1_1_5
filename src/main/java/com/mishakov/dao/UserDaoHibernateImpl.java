@@ -32,7 +32,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = Util.getSessionFactory().openSession();
         try {
             session.beginTransaction();
-            session.createNativeQuery(CREATE_TABLE).executeUpdate();
+            session.createNativeQuery(CREATE_TABLE, User.class).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception ex) {
             if (session.getTransaction() != null) {
