@@ -3,9 +3,8 @@ package com.mishakov.dao;
 import com.mishakov.model.User;
 import com.mishakov.util.Util;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Selection;
+import jakarta.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class UserDaoHibernateImpl implements UserDao {
             " `lastName` VARCHAR(45) NOT NULL," +
             " `age` TINYINT NOT NULL," +
             " PRIMARY KEY (`id`))";
-    private final String GET_ALL_USERS = "FROM User";
 
 
 
@@ -104,20 +102,23 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Session session = Util.getSessionFactory().openSession();
         List<User> users= new ArrayList<>();
+        EntityManager em = Util.getEntityManager();
         try {
-            session.beginTransaction();
-            users = session.createQuery(GET_ALL_USERS, User.class).getResultList();
-            session.getTransaction().commit();
+            em.getTransaction().begin();
+            CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
+            criteria.select(criteria.from(User.class));
+            users = em.createQuery(criteria).getResultList();
+            em.getTransaction().commit();
         } catch (Exception ex) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
+            if (em.getTransaction() != null) {
+                em.getTransaction().rollback();
             }
             System.out.println("Problem with getting users");
             ex.printStackTrace();
         } finally {
-            session.close();
+            em.close();
         }
         return users;
     }
