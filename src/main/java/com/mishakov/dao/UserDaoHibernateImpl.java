@@ -2,6 +2,10 @@ package com.mishakov.dao;
 
 import com.mishakov.model.User;
 import com.mishakov.util.Util;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Selection;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
@@ -121,9 +125,14 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         Session session = Util.getSessionFactory().openSession();
+        List<User> usersList = this.getAllUsers();
         try {
             session.beginTransaction();
-            session.createQuery("DELETE FROM User").executeUpdate();
+            try {
+                usersList.forEach(x -> session.remove(x));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             session.getTransaction().commit();
         } catch (Exception ex) {
             if (session.getTransaction() != null) {
