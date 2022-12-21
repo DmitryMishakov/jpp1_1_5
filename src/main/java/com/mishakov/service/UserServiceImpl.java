@@ -3,6 +3,8 @@ package com.mishakov.service;
 import com.mishakov.dao.UserDao;
 import com.mishakov.dao.UserDaoHibernateImpl;
 import com.mishakov.model.User;
+import com.mishakov.util.Util;
+import org.apache.logging.log4j.Level;
 
 import java.util.List;
 
@@ -28,6 +30,10 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
+    }
+
+    public void printUsers(List<User> userList) {
+        userList.forEach(x -> Util.getUtilLogger().log(Level.INFO, x.toString()));
     }
 
     public void cleanUsersTable() {

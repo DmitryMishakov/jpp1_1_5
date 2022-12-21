@@ -15,5 +15,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
+    void printUsers(List<User> userList);
+
     void cleanUsersTable();
 }

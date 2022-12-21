@@ -2,6 +2,7 @@ package com.mishakov.dao;
 
 import com.mishakov.model.User;
 import com.mishakov.util.Util;
+import org.apache.logging.log4j.Level;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
@@ -37,8 +38,7 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
             }
-            System.out.println("Problem with create table");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problem with create table", ex);
         } finally {
             session.close();
         }
@@ -55,8 +55,7 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
             }
-            System.out.println("Problem with delete table");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problem with delete table", ex);
         } finally {
             session.close();
         }
@@ -69,13 +68,12 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             session.persist(new User(name, lastName, age));
             session.getTransaction().commit();
-            System.out.println("User с именем - " + name + " успешно добавлен в базу данных");
+            Util.getUtilLogger().log(Level.INFO,"User с именем - " + name + " успешно добавлен в базу данных");
         } catch (Exception ex) {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
             }
-            System.out.println("Problem with save user");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problem with save user", ex);
         } finally {
             session.close();
         }
@@ -92,8 +90,7 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
             }
-            System.out.println("Problem with delete user");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problem with delete user", ex);
         } finally {
             session.close();
         }
@@ -111,8 +108,7 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
             }
-            System.out.println("Problem with getting users");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problem with getting users", ex);
         } finally {
             session.close();
         }
@@ -130,8 +126,7 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session.getTransaction() != null) {
                 session.getTransaction().rollback();
             }
-            System.out.println("Problem with clean table");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problem with clean table", ex);
         } finally {
             session.close();
         }

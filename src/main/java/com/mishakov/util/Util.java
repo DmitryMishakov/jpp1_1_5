@@ -1,7 +1,9 @@
 package com.mishakov.util;
 
 import com.mishakov.model.User;
-import jakarta.persistence.EntityManager;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -16,6 +18,12 @@ import java.util.Properties;
 
 public class Util {
 
+    private static final Logger utilLogger = LogManager.getLogger(Util.class);
+
+    public static Logger getUtilLogger() {
+        return utilLogger;
+    }
+
 //  JDBC part
     private static final String DBNAME = "mydbtest";
     private static final String URL = "jdbc:mysql://localhost:3306/" + DBNAME;
@@ -29,11 +37,9 @@ public class Util {
             Class.forName(DRIVER); // for old java (< 8 version)
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException sqlException) {
-            System.out.println("Problem with connection");
-            sqlException.printStackTrace();
+            utilLogger.log(Level.ERROR,"Problem with connection", sqlException);
         } catch (ClassNotFoundException classNotFoundException) {
-            System.out.println("Driver not found");
-            classNotFoundException.printStackTrace();
+            utilLogger.log(Level.ERROR,"Driver not found", classNotFoundException);
         }
         return conn;
     }
@@ -62,7 +68,7 @@ public class Util {
 
                 return metadata.getSessionFactoryBuilder().build();
             } catch (Throwable ex) {
-                System.err.println("Initial SessionFactory creation failed " + ex);
+                utilLogger.log(Level.ERROR,"Initial SessionFactory creation failed", ex);
                 throw new ExceptionInInitializerError(ex);
             }
         } else {
@@ -72,10 +78,6 @@ public class Util {
 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
-    }
-
-    public static EntityManager getEntityManager() {
-        return sessionFactory.createEntityManager();
     }
 
     public static void shutdown() {

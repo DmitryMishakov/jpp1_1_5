@@ -2,6 +2,7 @@ package com.mishakov.dao;
 
 import com.mishakov.model.User;
 import com.mishakov.util.Util;
+import org.apache.logging.log4j.Level;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,8 +36,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 PreparedStatement myPS = connection.prepareStatement(CREATE_TABLE)) {
             myPS.executeUpdate();
         } catch(SQLException ex) {
-            System.out.println("Problems with creating table");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR, "Problems with creating table", ex);
         }
     }
 
@@ -45,8 +45,7 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement myPS = connection.prepareStatement(DELETE_TABLE)) {
             myPS.executeUpdate();
         } catch(SQLException ex) {
-            System.out.println("Problems with deleting table");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problems with deleting table", ex);
         }
     }
 
@@ -57,10 +56,9 @@ public class UserDaoJDBCImpl implements UserDao {
             myPS.setString(2, lastName);
             myPS.setByte(3, age);
             myPS.executeUpdate();
-            System.out.println("User с именем - " + name + " успешно добавлен в базу данных");
+            Util.getUtilLogger().log(Level.INFO, "User с именем - " + name + " успешно добавлен в базу данных");
         } catch(SQLException ex) {
-            System.out.println("Problems with saving user");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problems with saving user", ex);
         }
     }
 
@@ -70,8 +68,7 @@ public class UserDaoJDBCImpl implements UserDao {
             myPS.setLong(1, id);
             myPS.executeUpdate();
         } catch(SQLException ex) {
-            System.out.println("Problems with removing user");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problems with removing user", ex);
         }
     }
 
@@ -88,8 +85,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 result.add(user);
             }
         } catch(SQLException ex) {
-            System.out.println("Problems with select all users");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problems with select all users", ex);
         }
         return result;
     }
@@ -99,8 +95,7 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement myPS = connection.prepareStatement(CLEAR_TABLE)) {
             myPS.executeUpdate();
         } catch(SQLException ex) {
-            System.out.println("Problems with clearing table");
-            ex.printStackTrace();
+            Util.getUtilLogger().log(Level.ERROR,"Problems with clearing table", ex);
         }
     }
 }
