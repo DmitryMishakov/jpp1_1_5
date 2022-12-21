@@ -17,6 +17,7 @@ public class UserDaoHibernateImpl implements UserDao {
             " `age` TINYINT NOT NULL," +
             " PRIMARY KEY (`id`))";
     private final String CLEAR_TABLE = "DELETE FROM users";
+    private final String GET_ALL_USERS = "SELECT * FROM users";
 
 
 
@@ -104,7 +105,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = Util.getSessionFactory().openSession();
         try {
             session.beginTransaction();
-            session.createNativeQuery(CLEAR_TABLE, User.class);
+            users = session.createNativeQuery(GET_ALL_USERS, User.class).getResultList();
             session.getTransaction().commit();
         } catch (Exception ex) {
             if (session.getTransaction() != null) {
